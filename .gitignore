@@ -1,0 +1,40 @@
+# Environment
+.env
+.env.local
+.env.*.local
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Node (if applicable)
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+*.log
