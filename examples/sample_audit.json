@@ -1,0 +1,24 @@
+{
+  "building": {
+    "client_name": "Ulrich Sample Residence",
+    "address": "123 Sample Lane, Springfield, IL",
+    "building_type": "residential",
+    "square_feet": 2400,
+    "year_built": 1998
+  },
+  "systems": {
+    "hvac_age_years": 17,
+    "water_heater_age_years": 12,
+    "attic_insulation_r_value": 19,
+    "blower_door_ach50": 6.4,
+    "duct_leakage_percent": 18
+  },
+  "consumption": {
+    "annual_electric_kwh": 16800,
+    "annual_gas_therms": 620
+  },
+  "notes": [
+    "South-facing rooms overheat in summer.",
+    "Client reported comfort complaints in upstairs bedrooms."
+  ]
+}

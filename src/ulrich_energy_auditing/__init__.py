@@ -1,0 +1,2 @@
+"""Ulrich Energy Auditing package."""
+
