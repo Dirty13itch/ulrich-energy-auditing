@@ -38,14 +38,6 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 
 `smoke.ps1` is the repo proof command. It creates `.venv` if missing, only refreshes the editable install when `pyproject.toml` changes, and then runs both the sample report generation path and `pytest`. Use `.\smoke.ps1 -RefreshEnv` to force a reinstall when environment repair is the point of the check.
 
-## PR Follow-Through
-
-- PR `#1` (`chore: harden cli smoke lane`) is still open as a draft.
-- Local repo proof remains green via `.\smoke.ps1`.
-- The only failing GitHub status is `Vercel`, and the failure is external to this repo's Python CLI contract: the connected Vercel project is configured to run `next build`, then errors because this repo has no `package.json` or `next` dependency.
-- There are no human review requests or requested changes on the PR right now.
-- Current disposition: keep the PR parked until the Vercel integration is disconnected, reconfigured away from `nextjs`, or made non-blocking for this repository.
-
 ## Current Codex Gaps
 
 - Only one repo-local skill exists so far: `.agents/skills/cli-smoke/SKILL.md`
