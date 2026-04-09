@@ -51,4 +51,11 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 - Only one repo-local skill exists so far: `.agents/skills/cli-smoke/SKILL.md`
 - No repo-local `.codex/config.toml`
 
+## Recommendation Proof Contract
+
+- Recommendation behavior is now locked by tests against the committed sample contract.
+- `tests/test_analysis.py` pins the recommendation trigger boundaries, sample recommendation order, and total savings math.
+- `tests/test_cli.py` pins the CLI-rendered Markdown to `reports/sample-report.md`.
+- If recommendation rules or report wording change, update `examples/sample_audit.json`, `reports/sample-report.md`, and the matching tests in the same pass.
+
 Best next repo-local Codex upgrade after this file: add a repo-local `.codex/config.toml` only if this repo develops workflow-specific defaults.
