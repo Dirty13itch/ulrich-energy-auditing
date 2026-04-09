@@ -22,10 +22,12 @@ python -m venv .venv
 
 ```powershell
 cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .[dev]
-.\.venv\Scripts\python.exe -m pytest
+.\smoke.ps1
 ```
+
+`smoke.ps1` is the canonical proof lane for this repo. It bootstraps `.venv` on first run, refreshes the editable install when `pyproject.toml` changes, then runs the sample CLI path plus `pytest`. Use `.\smoke.ps1 -RefreshEnv` when you want to force a reinstall.
+
+Recommendation and report behavior is intentionally locked to the sample contract in `examples/sample_audit.json` and `reports/sample-report.md`. If you change recommendation rules, rendered report wording, or savings assumptions, update the committed sample report and the matching tests in the same pass.
 
 ## Output Contract
 

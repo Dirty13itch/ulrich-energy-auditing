@@ -23,5 +23,9 @@ def test_cli_generates_report(tmp_path: Path) -> None:
 
     assert "Wrote report" in result.stdout
     content = output_path.read_text(encoding="utf-8")
-    assert "# Energy Audit Report" in content
-    assert "Recommendations" in content
+    expected_content = (repo_root / "reports" / "sample-report.md").read_text(encoding="utf-8")
+
+    assert content == expected_content
+    assert "- Estimated annual opportunity: $1750" in content
+    assert "- **Increase attic insulation** (high priority)" in content
+    assert "- **Water heater replacement planning** (low priority)" in content
