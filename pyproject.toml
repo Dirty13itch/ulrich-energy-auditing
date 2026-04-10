@@ -8,10 +8,10 @@ version = "0.1.0"
 description = "Local-first CLI MVP for building energy audit analysis and reporting."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["reportlab>=4.0"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.2"]
+dev = ["pypdf>=5.0", "pytest>=8.2"]
 
 [project.scripts]
 ulrich-energy-auditing = "ulrich_energy_auditing.cli:main"

@@ -20,6 +20,20 @@ Ulrich Energy Auditing is a local audit-assistant product for producing consiste
    - rough annual savings estimate
 4. Review/edit the report before client delivery.
 
+The intake path can now be reached either by:
+
+- one canonical audit JSON file
+- or a simpler audit CSV plus utility-bill CSV that normalize into the same audit model
+
+Delivery can now leave the CLI as:
+
+- Markdown for operator editing
+- PDF for client-ready handoff
+
+The report layer now also adds regional benchmark context by selecting a built-in benchmark pack for the
+building archetype and climate region. Operators can keep the auto-selected pack or override it explicitly
+from the CLI when they want a different peer group.
+
 ## Why This MVP
 
 - It exits ambiguity without forcing a premature full-stack app.
@@ -46,11 +60,24 @@ Ulrich Energy Auditing is a local audit-assistant product for producing consiste
 - `notes`
   - freeform operator notes
 
+## Intake Helpers
+
+- audit CSV format: `section,field,value`
+- utility bill CSV format: usage rows with `electric_kwh` and/or `gas_therms`
+- import helpers normalize both paths into the same audit payload before analysis
+
+## Benchmark Packs
+
+- built-in benchmark packs cover legacy and modern residential plus small-office archetypes
+- region handling currently supports mixed-humid, cold-climate, and hot-humid defaults
+- the default pack is inferred from state abbreviation in the address, building type, and year built
+- the operator can override the inferred pack with `--benchmark-pack`
+
 ## Stack Decision
 
 - Runtime: Python 3.11+
 - Interface: local CLI
-- Report format: Markdown
+- Report formats: Markdown and PDF
 - Test path: `pytest`
 
 ## Local Scaffold Plan

@@ -44,8 +44,34 @@ class Recommendation:
 
 
 @dataclass(slots=True)
+class BenchmarkPack:
+    pack_id: str
+    label: str
+    region: str
+    building_archetype: str
+    vintage_label: str
+    description: str
+    high_performing_max_eui: float
+    solid_max_eui: float
+    improvement_ready_max_eui: float
+    attic_insulation_target_r: int
+    blower_door_target_ach50: float
+    duct_leakage_target_percent: float
+
+
+@dataclass(slots=True)
+class BenchmarkComparison:
+    pack: BenchmarkPack
+    selection_reason: str
+    performance_summary: str
+    peer_targets_summary: str
+    system_notes: list[str]
+
+
+@dataclass(slots=True)
 class AuditSummary:
     energy_use_intensity: float
     benchmark_band: str
+    benchmark_comparison: BenchmarkComparison
     recommendations: list[Recommendation]
     estimated_total_annual_savings_usd: int

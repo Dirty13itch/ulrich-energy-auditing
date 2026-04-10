@@ -1,6 +1,11 @@
 param(
     [string]$InputPath = "examples\sample_audit.json",
     [string]$OutputPath = "reports\sample-report.md",
+    [string]$CsvInputPath = "examples\sample_audit.csv",
+    [string]$UtilityBillsPath = "examples\sample_utility_bills.csv",
+    [string]$CsvOutputPath = "reports\sample-report-from-csv.md",
+    [string]$NormalizedAuditPath = "reports\sample-audit-from-csv.json",
+    [string]$PdfOutputPath = "reports\sample-report-from-csv.pdf",
     [switch]$RefreshEnv
 )
 
@@ -38,6 +43,11 @@ try {
     & $python -m ulrich_energy_auditing.cli $InputPath --output $OutputPath
     if ($LASTEXITCODE -ne 0) {
         throw "Sample report generation failed."
+    }
+
+    & $python -m ulrich_energy_auditing.cli $CsvInputPath --utility-bills $UtilityBillsPath --emit-json $NormalizedAuditPath --output $CsvOutputPath --pdf-output $PdfOutputPath
+    if ($LASTEXITCODE -ne 0) {
+        throw "CSV import report generation failed."
     }
 
     & $python -m pytest

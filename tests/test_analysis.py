@@ -34,5 +34,8 @@ def test_analysis_generates_recommendations() -> None:
         "improvement-ready",
         "high-opportunity",
     }
+    assert summary.benchmark_comparison.pack.pack_id == "mixed-humid-residential-legacy"
+    assert "Mixed-Humid Residential Retrofit" in summary.benchmark_comparison.pack.label
+    assert summary.benchmark_comparison.system_notes
     assert summary.recommendations
     assert summary.estimated_total_annual_savings_usd > 0

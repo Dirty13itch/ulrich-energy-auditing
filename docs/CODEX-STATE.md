@@ -1,6 +1,6 @@
 # CODEX-STATE
 
-Last updated: 2026-04-08
+Last updated: 2026-04-09
 
 ## Purpose
 
@@ -18,6 +18,9 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 
 - No real customer data should enter this repo.
 - The current contract is one JSON input to one Markdown report.
+- Intake can now start from audit CSV plus utility-bill CSV as long as both normalize into the same audit payload.
+- The CLI can also emit a PDF handoff from the same report sections when `--pdf-output` is provided.
+- The CLI now adds a regional benchmark pack automatically and can override that pack explicitly with `--benchmark-pack`.
 - Small explicit edits in `src/ulrich_energy_auditing/` are preferred over framework growth.
 - The main checkout is currently dirty, so non-trivial Codex work should prefer a worktree lane.
 
@@ -38,6 +41,13 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 
 `smoke.ps1` is the repo proof command. It creates `.venv` if missing, only refreshes the editable install when `pyproject.toml` changes, and then runs both the sample report generation path and `pytest`. Use `.\smoke.ps1 -RefreshEnv` to force a reinstall when environment repair is the point of the check.
 
+The smoke path now verifies both:
+
+- the original sample JSON intake
+- the CSV plus utility-bill normalization path
+- PDF report generation from the normalized audit
+- benchmark-pack catalog and regional benchmark content through pytest coverage
+
 ## PR Follow-Through
 
 - PR `#1` (`chore: harden cli smoke lane`) is still open as a draft.
@@ -50,5 +60,6 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 
 - Only one repo-local skill exists so far: `.agents/skills/cli-smoke/SKILL.md`
 - No repo-local `.codex/config.toml`
+- Next product tranche is persistence for saved audits and report history.
 
 Best next repo-local Codex upgrade after this file: add a repo-local `.codex/config.toml` only if this repo develops workflow-specific defaults.

@@ -1,0 +1,13 @@
+section,field,value
+building,client_name,Ulrich Sample Residence
+building,address,"123 Sample Lane, Springfield, IL"
+building,building_type,residential
+building,square_feet,2400
+building,year_built,1998
+systems,hvac_age_years,17
+systems,water_heater_age_years,12
+systems,attic_insulation_r_value,19
+systems,blower_door_ach50,6.4
+systems,duct_leakage_percent,18
+notes,note,South-facing rooms overheat in summer.
+notes,note,Client reported comfort complaints in upstairs bedrooms.

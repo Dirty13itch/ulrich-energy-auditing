@@ -38,3 +38,6 @@ npm-debug.log*
 
 # Build artifacts
 *.log
+reports/*.pdf
+reports/*-from-csv.md
+reports/*-from-csv.json
