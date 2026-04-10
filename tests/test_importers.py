@@ -7,6 +7,7 @@ from ulrich_energy_auditing.importers import (
     audit_to_payload,
     load_audit,
     load_utility_bills,
+    load_utility_bills_text,
 )
 
 
@@ -69,6 +70,17 @@ def test_load_utility_bills_requires_supported_usage_column(tmp_path: Path) -> N
 
     with pytest.raises(ValueError, match="Utility bill CSV must include at least one electric or gas usage column"):
         load_utility_bills(bills_path)
+
+
+def test_load_utility_bills_from_text() -> None:
+    consumption = load_utility_bills_text(
+        "billing_month,electric_kwh,gas_therms\n"
+        "2025-01,1200,48\n"
+        "2025-02,1100,43\n"
+    )
+
+    assert consumption.annual_electric_kwh == 2300
+    assert consumption.annual_gas_therms == 91
 
 
 def test_audit_to_payload_round_trips_notes_and_consumption() -> None:

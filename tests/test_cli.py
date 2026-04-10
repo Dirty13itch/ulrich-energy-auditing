@@ -4,7 +4,9 @@ from pathlib import Path
 import subprocess
 import sys
 
+import pytest
 from pypdf import PdfReader
+from ulrich_energy_auditing import cli
 
 
 def test_cli_generates_report(tmp_path: Path) -> None:
@@ -172,3 +174,36 @@ def test_cli_saves_audit_bundle_and_prints_history(tmp_path: Path) -> None:
     assert "Saved audits (showing 1)" in history_result.stdout
     assert "Ulrich Sample Residence" in history_result.stdout
     assert "benchmark pack mixed-humid-residential-legacy" in history_result.stdout
+
+
+def test_cli_guided_intake_launches_local_wizard(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    captured: dict[str, object] = {}
+
+    def fake_launch_guided_intake(**kwargs: object) -> dict[str, object]:
+        captured.update(kwargs)
+        return {
+            "emit_json_path": str(tmp_path / "guided-audit.json"),
+            "output_path": str(tmp_path / "guided-report.md"),
+            "pdf_output_path": None,
+            "benchmark_pack_id": "mixed-humid-residential-legacy",
+            "benchmark_pack_label": "Mixed-Humid Residential Retrofit (Legacy Home)",
+            "saved_bundle_dir": None,
+            "save_id": None,
+        }
+
+    monkeypatch.setattr(cli, "launch_guided_intake", fake_launch_guided_intake)
+
+    exit_code = cli.main(
+        [
+            "--guided-intake",
+            "--guided-intake-port",
+            "4312",
+            "--no-browser",
+            "--output",
+            str(tmp_path / "guided-report.md"),
+        ]
+    )
+
+    assert exit_code == 0
+    assert captured["port"] == 4312
+    assert captured["open_browser"] is False

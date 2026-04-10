@@ -4,8 +4,8 @@ Last updated: 2026-04-10
 
 ## Purpose
 
-This repo is a local-first Python CLI that turns one audit JSON input into one Markdown recommendation report.
-It should stay sample-only and CLI-first unless scope is explicitly expanded.
+This repo is a local-first Python audit workbench that turns one normalized audit input into one Markdown recommendation report.
+It should stay sample-only and Python-first unless scope is explicitly expanded.
 
 ## Start Here
 
@@ -19,6 +19,7 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 - No real customer data should enter this repo.
 - The current contract is one JSON input to one Markdown report.
 - Intake can now start from audit CSV plus utility-bill CSV as long as both normalize into the same audit payload.
+- Guided intake can now start from a localhost browser wizard as long as it writes that same normalized audit payload.
 - The CLI can also emit a PDF handoff from the same report sections when `--pdf-output` is provided.
 - The CLI now adds a regional benchmark pack automatically and can override that pack explicitly with `--benchmark-pack`.
 - The CLI can persist saved audits and report history outside the repo in `%LOCALAPPDATA%\UlrichEnergyAuditing\saved-audits`.
@@ -46,6 +47,7 @@ The smoke path now verifies both:
 
 - the original sample JSON intake
 - the CSV plus utility-bill normalization path
+- guided intake processing through pytest coverage of the same normalized audit path
 - PDF report generation from the normalized audit
 - benchmark-pack catalog and regional benchmark content through pytest coverage
 - saved audit bundle creation and local history listing through a temp `%LOCALAPPDATA%` override
@@ -62,6 +64,6 @@ The smoke path now verifies both:
 
 - Only one repo-local skill exists so far: `.agents/skills/cli-smoke/SKILL.md`
 - No repo-local `.codex/config.toml`
-- Next product tranche is a guided intake UI once the CLI schema stabilizes.
+- Next product tranche is benchmark-pack export presets for quoting and follow-up packets.
 
 Best next repo-local Codex upgrade after this file: add a repo-local `.codex/config.toml` only if this repo develops workflow-specific defaults.

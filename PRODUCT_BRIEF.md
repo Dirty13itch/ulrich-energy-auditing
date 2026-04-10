@@ -24,6 +24,7 @@ The intake path can now be reached either by:
 
 - one canonical audit JSON file
 - or a simpler audit CSV plus utility-bill CSV that normalize into the same audit model
+- or a guided localhost browser wizard that writes the same normalized audit model
 
 Delivery can now leave the CLI as:
 
@@ -66,6 +67,7 @@ from the CLI when they want a different peer group.
 - audit CSV format: `section,field,value`
 - utility bill CSV format: usage rows with `electric_kwh` and/or `gas_therms`
 - import helpers normalize both paths into the same audit payload before analysis
+- guided intake launches a local browser wizard from Python and still lands on that same normalized audit payload
 
 ## Benchmark Packs
 
@@ -77,7 +79,7 @@ from the CLI when they want a different peer group.
 ## Stack Decision
 
 - Runtime: Python 3.11+
-- Interface: local CLI
+- Interface: local CLI plus localhost browser wizard
 - Report formats: Markdown and PDF
 - persistence: local filesystem bundle store outside the repo
 - Test path: `pytest`

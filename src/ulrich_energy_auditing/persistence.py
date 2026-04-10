@@ -22,10 +22,11 @@ def save_audit_bundle(
     summary: AuditSummary,
     *,
     report_markdown: str,
-    input_path: Path,
+    input_path: Path | None,
     utility_bills_path: Path | None,
     save_name: str,
     pdf_output_path: Path | None = None,
+    input_source_override: str | None = None,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     timestamp = (now or datetime.now().astimezone()).replace(microsecond=0)
@@ -57,7 +58,11 @@ def save_audit_bundle(
         "address": audit.building.address,
         "building_type": audit.building.building_type,
         "benchmark_pack_id": summary.benchmark_comparison.pack.pack_id,
-        "input_source": _determine_input_source(input_path, utility_bills_path),
+        "input_source": _determine_input_source(
+            input_path,
+            utility_bills_path,
+            override=input_source_override,
+        ),
         "audit_json_path": str(audit_path),
         "markdown_report_path": str(markdown_path),
         "pdf_report_path": str(pdf_path) if pdf_path is not None else None,
@@ -115,8 +120,18 @@ def _slugify(value: str) -> str:
     return normalized or "saved-audit"
 
 
-def _determine_input_source(input_path: Path, utility_bills_path: Path | None) -> str:
-    base = input_path.suffix.lower().lstrip(".") or "unknown"
+def _determine_input_source(
+    input_path: Path | None,
+    utility_bills_path: Path | None,
+    *,
+    override: str | None = None,
+) -> str:
+    if override is not None:
+        return override
+    if input_path is None:
+        base = "unknown"
+    else:
+        base = input_path.suffix.lower().lstrip(".") or "unknown"
     if utility_bills_path is None:
         return base
     return f"{base}+utility-bills"

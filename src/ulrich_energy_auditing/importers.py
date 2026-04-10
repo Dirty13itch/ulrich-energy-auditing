@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import io
 import json
 from pathlib import Path
 from typing import Any
@@ -56,37 +57,12 @@ def load_audit_payload(path: Path) -> dict[str, Any]:
 
 def load_utility_bills(path: Path) -> ConsumptionProfile:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle)
-        fieldnames = tuple(reader.fieldnames or ())
-        electric_field = _find_first_present(fieldnames, _ELECTRIC_FIELDS)
-        gas_field = _find_first_present(fieldnames, _GAS_FIELDS)
+        return _load_utility_bills_from_handle(handle)
 
-        if electric_field is None and gas_field is None:
-            raise ValueError(
-                "Utility bill CSV must include at least one electric or gas usage column. "
-                "Supported headers include electric_kwh, annual_electric_kwh, gas_therms, and annual_gas_therms."
-            )
 
-        annual_electric_kwh = 0.0
-        annual_gas_therms = 0.0
-        for line_number, row in enumerate(reader, start=2):
-            if electric_field is not None:
-                annual_electric_kwh += _parse_optional_float(
-                    row.get(electric_field, ""),
-                    line_number=line_number,
-                    field_name=electric_field,
-                )
-            if gas_field is not None:
-                annual_gas_therms += _parse_optional_float(
-                    row.get(gas_field, ""),
-                    line_number=line_number,
-                    field_name=gas_field,
-                )
-
-    return ConsumptionProfile(
-        annual_electric_kwh=round(annual_electric_kwh, 2),
-        annual_gas_therms=round(annual_gas_therms, 2),
-    )
+def load_utility_bills_text(csv_text: str) -> ConsumptionProfile:
+    with io.StringIO(csv_text.lstrip("\ufeff")) as handle:
+        return _load_utility_bills_from_handle(handle)
 
 
 def build_audit_input(payload: dict[str, Any]) -> AuditInput:
@@ -256,3 +232,37 @@ def _parse_optional_float(raw_value: str, *, line_number: int, field_name: str) 
         raise ValueError(
             f"Invalid numeric value '{raw_value}' for utility bill field {field_name} at line {line_number}."
         ) from exc
+
+
+def _load_utility_bills_from_handle(handle: io.TextIOBase) -> ConsumptionProfile:
+    reader = csv.DictReader(handle)
+    fieldnames = tuple(reader.fieldnames or ())
+    electric_field = _find_first_present(fieldnames, _ELECTRIC_FIELDS)
+    gas_field = _find_first_present(fieldnames, _GAS_FIELDS)
+
+    if electric_field is None and gas_field is None:
+        raise ValueError(
+            "Utility bill CSV must include at least one electric or gas usage column. "
+            "Supported headers include electric_kwh, annual_electric_kwh, gas_therms, and annual_gas_therms."
+        )
+
+    annual_electric_kwh = 0.0
+    annual_gas_therms = 0.0
+    for line_number, row in enumerate(reader, start=2):
+        if electric_field is not None:
+            annual_electric_kwh += _parse_optional_float(
+                row.get(electric_field, ""),
+                line_number=line_number,
+                field_name=electric_field,
+            )
+        if gas_field is not None:
+            annual_gas_therms += _parse_optional_float(
+                row.get(gas_field, ""),
+                line_number=line_number,
+                field_name=gas_field,
+            )
+
+    return ConsumptionProfile(
+        annual_electric_kwh=round(annual_electric_kwh, 2),
+        annual_gas_therms=round(annual_gas_therms, 2),
+    )

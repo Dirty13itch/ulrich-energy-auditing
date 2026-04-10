@@ -52,6 +52,15 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 .\.venv\Scripts\python.exe -m ulrich_energy_auditing.cli examples\sample_audit.json --benchmark-pack mixed-humid-residential-legacy --output reports\sample-report.md
 ```
 
+Guided intake wizard:
+
+```powershell
+cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
+.\.venv\Scripts\python.exe -m ulrich_energy_auditing.cli --guided-intake --emit-json reports\guided-intake-audit.json --output reports\guided-intake-report.md --pdf-output reports\guided-intake-report.pdf
+```
+
+This launches a localhost browser wizard, captures the same audit fields used by the CLI, optionally accepts a utility-bill CSV upload, then writes the normalized audit payload plus report outputs through the existing Python workflow.
+
 Local save + history path:
 
 ```powershell
@@ -75,6 +84,7 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 
 - input: one audit JSON file
 - alternate intake: one audit CSV plus optional utility-bill CSV overlay
+- alternate guided intake: one localhost browser wizard that writes the same normalized audit JSON
 - benchmark context: one built-in regional/archetype benchmark pack, auto-selected or overridden by CLI
 - primary delivery: one Markdown report
 - optional delivery: one concise PDF handoff from the same report contract
@@ -94,7 +104,8 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 - MVP scaffold exists and runs locally
 - sample report generation is implemented
 - CSV and utility-bill import helpers are implemented
+- guided browser intake is implemented and lands on the same normalized audit/report contract
 - PDF export is implemented
 - benchmark packs for regional building archetypes are implemented
 - saved audit history and local bundle persistence are implemented
-- next phase is a guided intake UI plus benchmark-pack follow-up outputs
+- next phase is benchmark-pack follow-up outputs plus contractor-facing summaries

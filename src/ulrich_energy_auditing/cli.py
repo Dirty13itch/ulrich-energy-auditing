@@ -5,12 +5,13 @@ from pathlib import Path
 
 from ulrich_energy_auditing.analysis import analyze_audit
 from ulrich_energy_auditing.benchmark_packs import list_benchmark_packs
+from ulrich_energy_auditing.guided_intake import launch_guided_intake
 from ulrich_energy_auditing.importers import load_audit, write_audit_json
 from ulrich_energy_auditing.persistence import render_history, save_audit_bundle
 from ulrich_energy_auditing.reporting import render_markdown_report, write_pdf_report
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Generate an energy audit markdown report from JSON or CSV intake data."
     )
@@ -50,6 +51,22 @@ def main() -> int:
         help="Maximum number of saved audit history entries to print when --history is used.",
     )
     parser.add_argument(
+        "--guided-intake",
+        action="store_true",
+        help="Launch a local browser-based intake wizard that writes the same normalized audit payload used by the CLI.",
+    )
+    parser.add_argument(
+        "--guided-intake-port",
+        type=int,
+        default=0,
+        help="Optional localhost port for the guided intake wizard. Defaults to an ephemeral free port.",
+    )
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Do not automatically open the guided intake URL in the default browser.",
+    )
+    parser.add_argument(
         "--emit-json",
         type=Path,
         help="Optional path to write the normalized audit payload as JSON before report generation.",
@@ -65,7 +82,7 @@ def main() -> int:
         type=Path,
         help="Optional path to also write a PDF version of the report.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.list_benchmark_packs:
         for pack in list_benchmark_packs():
@@ -77,6 +94,31 @@ def main() -> int:
 
     if args.history:
         print(render_history(limit=args.history_limit))
+        return 0
+
+    if args.guided_intake:
+        if args.input is not None:
+            parser.error("guided intake does not accept the positional input path.")
+        result = launch_guided_intake(
+            emit_json_path=args.emit_json,
+            output_path=args.output,
+            pdf_output_path=args.pdf_output,
+            benchmark_pack_id=args.benchmark_pack,
+            save_name=args.save_name,
+            port=args.guided_intake_port,
+            open_browser=not args.no_browser,
+        )
+        print(f"Wrote normalized audit to {result['emit_json_path']}")
+        print(f"Wrote report to {result['output_path']}")
+        print(
+            "Used benchmark pack "
+            f"{result['benchmark_pack_id']} "
+            f"({result['benchmark_pack_label']})"
+        )
+        if result["pdf_output_path"] is not None:
+            print(f"Wrote PDF report to {result['pdf_output_path']}")
+        if result["saved_bundle_dir"] is not None:
+            print(f"Saved audit bundle {result['save_id']} to {result['saved_bundle_dir']}")
         return 0
 
     if args.input is None:
