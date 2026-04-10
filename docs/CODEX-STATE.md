@@ -1,6 +1,6 @@
 # CODEX-STATE
 
-Last updated: 2026-04-09
+Last updated: 2026-04-10
 
 ## Purpose
 
@@ -21,8 +21,9 @@ It should stay sample-only and CLI-first unless scope is explicitly expanded.
 - Intake can now start from audit CSV plus utility-bill CSV as long as both normalize into the same audit payload.
 - The CLI can also emit a PDF handoff from the same report sections when `--pdf-output` is provided.
 - The CLI now adds a regional benchmark pack automatically and can override that pack explicitly with `--benchmark-pack`.
+- The CLI can persist saved audits and report history outside the repo in `%LOCALAPPDATA%\UlrichEnergyAuditing\saved-audits`.
 - Small explicit edits in `src/ulrich_energy_auditing/` are preferred over framework growth.
-- The main checkout is currently dirty, so non-trivial Codex work should prefer a worktree lane.
+- The main checkout should be kept clean between tranches.
 
 ## PR Follow-Through
 
@@ -47,6 +48,7 @@ The smoke path now verifies both:
 - the CSV plus utility-bill normalization path
 - PDF report generation from the normalized audit
 - benchmark-pack catalog and regional benchmark content through pytest coverage
+- saved audit bundle creation and local history listing through a temp `%LOCALAPPDATA%` override
 
 ## PR Follow-Through
 
@@ -60,6 +62,6 @@ The smoke path now verifies both:
 
 - Only one repo-local skill exists so far: `.agents/skills/cli-smoke/SKILL.md`
 - No repo-local `.codex/config.toml`
-- Next product tranche is persistence for saved audits and report history.
+- Next product tranche is a guided intake UI once the CLI schema stabilizes.
 
 Best next repo-local Codex upgrade after this file: add a repo-local `.codex/config.toml` only if this repo develops workflow-specific defaults.

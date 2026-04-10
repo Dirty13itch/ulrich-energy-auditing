@@ -15,6 +15,8 @@ $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $python = Join-Path $repoRoot ".venv\Scripts\python.exe"
 $installStamp = Join-Path $repoRoot ".venv\.codex-smoke-pyproject.sha256"
 $pyprojectPath = Join-Path $repoRoot "pyproject.toml"
+$smokeLocalAppData = Join-Path $env:TEMP "ulrich-energy-auditing-smoke-localappdata"
+$originalLocalAppData = $env:LOCALAPPDATA
 
 Push-Location $repoRoot
 
@@ -40,14 +42,25 @@ try {
         Set-Content -Path $installStamp -Value $currentHash -NoNewline
     }
 
+    if (Test-Path $smokeLocalAppData) {
+        Remove-Item -LiteralPath $smokeLocalAppData -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $smokeLocalAppData | Out-Null
+    $env:LOCALAPPDATA = $smokeLocalAppData
+
     & $python -m ulrich_energy_auditing.cli $InputPath --output $OutputPath
     if ($LASTEXITCODE -ne 0) {
         throw "Sample report generation failed."
     }
 
-    & $python -m ulrich_energy_auditing.cli $CsvInputPath --utility-bills $UtilityBillsPath --emit-json $NormalizedAuditPath --output $CsvOutputPath --pdf-output $PdfOutputPath
+    & $python -m ulrich_energy_auditing.cli $CsvInputPath --utility-bills $UtilityBillsPath --emit-json $NormalizedAuditPath --output $CsvOutputPath --pdf-output $PdfOutputPath --save-name "Smoke sample audit"
     if ($LASTEXITCODE -ne 0) {
         throw "CSV import report generation failed."
+    }
+
+    & $python -m ulrich_energy_auditing.cli --history --history-limit 5
+    if ($LASTEXITCODE -ne 0) {
+        throw "Audit history listing failed."
     }
 
     & $python -m pytest
@@ -58,5 +71,14 @@ try {
     Write-Host "Smoke passed."
 }
 finally {
+    if ($null -eq $originalLocalAppData) {
+        Remove-Item Env:LOCALAPPDATA -ErrorAction SilentlyContinue
+    }
+    else {
+        $env:LOCALAPPDATA = $originalLocalAppData
+    }
+    if (Test-Path $smokeLocalAppData) {
+        Remove-Item -LiteralPath $smokeLocalAppData -Recurse -Force
+    }
     Pop-Location
 }

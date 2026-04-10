@@ -29,6 +29,7 @@ Delivery can now leave the CLI as:
 
 - Markdown for operator editing
 - PDF for client-ready handoff
+- or a saved local audit bundle for later retrieval from history
 
 The report layer now also adds regional benchmark context by selecting a built-in benchmark pack for the
 building archetype and climate region. Operators can keep the auto-selected pack or override it explicitly
@@ -78,6 +79,7 @@ from the CLI when they want a different peer group.
 - Runtime: Python 3.11+
 - Interface: local CLI
 - Report formats: Markdown and PDF
+- persistence: local filesystem bundle store outside the repo
 - Test path: `pytest`
 
 ## Local Scaffold Plan

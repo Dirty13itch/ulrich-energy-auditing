@@ -52,6 +52,16 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 .\.venv\Scripts\python.exe -m ulrich_energy_auditing.cli examples\sample_audit.json --benchmark-pack mixed-humid-residential-legacy --output reports\sample-report.md
 ```
 
+Local save + history path:
+
+```powershell
+cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
+.\.venv\Scripts\python.exe -m ulrich_energy_auditing.cli examples\sample_audit.csv --utility-bills examples\sample_utility_bills.csv --output reports\sample-report-from-csv.md --pdf-output reports\sample-report-from-csv.pdf --save-name "Main Street audit"
+.\.venv\Scripts\python.exe -m ulrich_energy_auditing.cli --history --history-limit 5
+```
+
+Saved audit bundles live outside the repo in `%LOCALAPPDATA%\UlrichEnergyAuditing\saved-audits`.
+
 ## Smoke Path
 
 ```powershell
@@ -68,6 +78,7 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 - benchmark context: one built-in regional/archetype benchmark pack, auto-selected or overridden by CLI
 - primary delivery: one Markdown report
 - optional delivery: one concise PDF handoff from the same report contract
+- optional persistence: one saved local audit bundle plus history listing outside the repo
 - operator: Shaun / Ulrich Energy Auditing
 - posture: local-first CLI MVP
 
@@ -85,4 +96,5 @@ cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
 - CSV and utility-bill import helpers are implemented
 - PDF export is implemented
 - benchmark packs for regional building archetypes are implemented
-- next phase is persistence, saved audit history, and richer delivery outputs
+- saved audit history and local bundle persistence are implemented
+- next phase is a guided intake UI plus benchmark-pack follow-up outputs
