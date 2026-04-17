@@ -22,10 +22,10 @@ python -m venv .venv
 
 ```powershell
 cd C:\Users\Shaun\dev\portfolio\ulrich-energy-auditing
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .[dev]
-.\.venv\Scripts\python.exe -m pytest
+.\smoke.ps1
 ```
+
+`smoke.ps1` is the canonical proof lane for this repo. It bootstraps `.venv` on first run, refreshes the editable install when `pyproject.toml` changes, then runs the sample CLI path plus `pytest`. Use `.\smoke.ps1 -RefreshEnv` when you want to force a reinstall.
 
 ## Output Contract
 
